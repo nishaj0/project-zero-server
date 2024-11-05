@@ -1,12 +1,17 @@
 {
   "name": "project-zero",
   "version": "1.0.0",
-  "description": "",
   "main": "src/app.ts",
   "scripts": {
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "lint": "biome check src",
+    "format": "biome check --write src"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4"
+  },
+  "description": ""
 }
