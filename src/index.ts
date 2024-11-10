@@ -2,6 +2,8 @@ import express from "express";
 import logger from "./logger/logger";
 import dotenv from "dotenv";
 import authRouter from "./routes/authRoutes";
+import mongoose from "mongoose";
+import { globalErrorHandler } from "./middlewares/globalErrorHandler";
 
 dotenv.config();
 
@@ -11,7 +13,7 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
-app.get("/", (req, res) => {
+app.get("/", (_req, res) => {
   logger.error("error");
   logger.warn("warn");
   logger.info("info");
@@ -24,6 +26,15 @@ app.get("/", (req, res) => {
 
 app.use("/api", authRouter);
 
-app.listen(port, () => {
-  logger.info(`Server is running on port ${port}`);
-});
+app.use(globalErrorHandler);
+
+mongoose
+  .connect(process.env.MONGO_URI || "")
+  .then(() => {
+    app.listen(port, () => {
+      logger.info(`Server is running on port ${port}`);
+    });
+  })
+  .catch((err) => {
+    logger.error(err);
+  });
